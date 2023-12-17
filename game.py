@@ -4,19 +4,18 @@ from classes import *
 from variables import *
 
 pygame.init()
-
 FPS = 60
 
 screen = pygame.display.set_mode((screenWidth, screenHeight))
 pygame.display.set_caption("Minesweeper")
-font = pygame.font.SysFont('NotoSans-Regular.ttf', textSize)
+font = pygame.font.SysFont('consolas', textSize)
 
 clock = pygame.time.Clock()
 
 #Make a grid
 grid = []
 for i in range(gridWidth * gridHeight):
-    tile = Tile((tileSize + frameSize) *  int(i % gridWidth), int(i / gridWidth) * (tileSize + frameSize))
+    tile = Tile((tileSize + frameSize) * int(i % gridWidth), int(i / gridWidth) * (tileSize + frameSize))
     if i % gridWidth == 0:
         grid.append([])
     grid[len(grid) - 1].append(tile)
@@ -29,6 +28,7 @@ for i in range(bombCount):
 pause = False
 win = True
 first = True
+
 #Main Loop
 while True:
     screen.fill(backgroundColor)
@@ -41,7 +41,7 @@ while True:
                 #Display the number of adjacent mines
                 textScreen = font.render(str(tile.adjacent), True, colors[tile.adjacent - 1], backgroundColor)
                 textRect = textScreen.get_rect()
-                textRect.topleft = (tile.x + 8, tile.y)
+                textRect.topleft = (tile.rect.x + 8, tile.rect.y)
                 screen.blit(textScreen, textRect)
             if tile.bomb == False and tile.color != backgroundColor:
                 win = False
@@ -76,7 +76,7 @@ while True:
                                 for x in range(gridWidth):
                                     grid[y][x].adjacent = adjacent(grid, x, y)
                         if tile.color == tileColor and event.button == 1 and tile.bomb == False:
-                            open(grid, j % gridWidth, i)
+                            openTiles(grid, j % gridWidth, i)
                         tile.update(event)
 
     clock.tick(FPS)

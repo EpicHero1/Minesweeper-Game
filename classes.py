@@ -1,18 +1,17 @@
 import pygame
 from variables import *
+
 class Tile:
     def __init__(self, x, y) -> None:
-        self.x = x
-        self.y = y
         self.color = tileColor
         self.bomb = False
         self.flag = False
         self.adjacent = 0
-        self.rect = pygame.Rect(self.x, self.y, tileSize, tileSize)
+        self.rect = pygame.Rect(x, y, tileSize, tileSize)
     def __str__(self) -> str:
-        return f"Tile({self.x},{self.y})"
+        return f"Tile({self.rect.x},{self.rect.x})"
     def main(self, display):
-        pygame.draw.rect(display, self.color, (self.x, self.y, tileSize, tileSize))
+        pygame.draw.rect(display, self.color, self.rect)
 
     def update(self, event):
         if event.button == 1 and self.flag == False:
@@ -38,16 +37,17 @@ def adjacent(matrix, x, y):
                 count += 1
     return count
 
-def open(matrix, x, y):
+def openTiles(matrix, x, y):
     width = len(matrix[0]) - 1
     height = len(matrix) - 1
+    #Look into adjacent tiles and check bombs recursively
     for i in range(-1 if x > 0 else 0, 2 if x < width else 1):
         for j in range(-1 if y > 0 else 0, 2 if y < height else 1):
             if matrix[y + j][x + i].color != backgroundColor:
                 if matrix[y + j][x + i].bomb == False:
                     matrix[y + j][x + i].color = backgroundColor
                     if matrix[y + j][x + i].adjacent == 0:
-                        open(matrix, x + i, y + j)
+                        openTiles(matrix, x + i, y + j)
 
 def firstClick(matrix, x, y):
     matrix[y][x].bomb = False
