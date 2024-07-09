@@ -4,7 +4,6 @@ from classes import *
 from variables import *
 
 pygame.init()
-FPS = 60
 
 screen = pygame.display.set_mode((screenWidth, screenHeight))
 pygame.display.set_caption("Minesweeper")
@@ -79,5 +78,5 @@ while True:
                             openTiles(grid, j % gridWidth, i)
                         tile.update(event)
 
-    clock.tick(FPS)
+    clock.tick(60)
     pygame.display.update()
